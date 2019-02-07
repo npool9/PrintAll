@@ -5,6 +5,7 @@ package edu.ncsu.nmpool;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 
 import javax.swing.JFrame;
 
@@ -20,6 +21,8 @@ public class Controller {
 	 */
 	public void go() {
 		String directory = initView();
+		FileHandler fileHandler = new FileHandler(directory);
+		
 	}
 	
 	/**
@@ -42,5 +45,7 @@ public class Controller {
 	    frame.setVisible(true);
 	    return(directory);
 	}
+	
+	public 
 	
 }
