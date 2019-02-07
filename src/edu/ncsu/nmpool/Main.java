@@ -16,7 +16,7 @@ public class Main {
 	public static void main(String s[]) {
 		Controller controller = new Controller();
 		controller.go();
-		System.exit(0);
+//		System.exit(0);
 	  }
 
 }

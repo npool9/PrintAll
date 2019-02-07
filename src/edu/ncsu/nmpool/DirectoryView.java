@@ -5,6 +5,7 @@ package edu.ncsu.nmpool;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.io.File;
 import java.awt.*;
 import java.util.*;
 
@@ -22,7 +23,7 @@ public class DirectoryView extends JPanel {
 	private JFileChooser chooser;
 	private String chooserTitle;
 	
-	/*
+	/**
 	 * Create the directory chooser view.
 	 * 
 	 * @return String: the absolute path to the directory from which we want to print all files
@@ -46,6 +47,35 @@ public class DirectoryView extends JPanel {
 	    	  System.out.println(selectedDirectory);
 	    }
 	    return(selectedDirectory);
-	  }
+	}
+	
+	/**
+	 * Display all of the files found by our search. Check to make sure these are actually files that the user wants to print.
+	 * 
+	 * @param allFiles: an ArrayList of files with each File representing the absolute path of a file to be printed
+	 * @return boolean: true or false based on confirmation that the user does or does not want to print all of the listed files
+	 */
+	public boolean displayAllFiles(ArrayList<File> allFiles) {
+		JFrame frame = new JFrame("Double Check");
+
+		JPanel container = new JPanel();
+		JScrollPane scrollPane = new JScrollPane(container);
+		frame.add(scrollPane);
+		JLabel label = new JLabel("<html>Are these the files you want to print?<br/><br/></html>");
+		container.add(label);
+		label = new JLabel("\n");
+		container.add(label);
+		
+		for (int i = 0; i < allFiles.size(); i++) {
+			JLabel fileName = new JLabel(allFiles.get(i).toString());
+			container.add(fileName);
+		}
+
+		frame.setSize(new Dimension(700, 400));
+		frame.add(container);
+		frame.setVisible(true);
+		
+		return false;
+	}
 
 }

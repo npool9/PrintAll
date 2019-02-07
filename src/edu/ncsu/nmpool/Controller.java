@@ -30,6 +30,8 @@ public class Controller {
 		for (int i = 0; i < allPrintFiles.size(); i++) {
 			System.out.println(allPrintFiles.get(i));
 		}
+		DirectoryView view = new DirectoryView();
+		view.displayAllFiles(allPrintFiles);
 	}
 	
 	/**
