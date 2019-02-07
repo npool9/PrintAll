@@ -19,9 +19,8 @@ import java.util.*;
  */
 public class DirectoryView extends JPanel {
 	
-	JFileChooser chooser;
-	String chooserTitle;
-	
+	private JFileChooser chooser;
+	private String chooserTitle;
 	
 	/*
 	 * Create the directory chooser view.
