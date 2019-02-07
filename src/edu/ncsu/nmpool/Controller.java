@@ -6,6 +6,7 @@ package edu.ncsu.nmpool;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
@@ -21,8 +22,14 @@ public class Controller {
 	 */
 	public void go() {
 		String directory = initView();
-		FileHandler fileHandler = new FileHandler(directory);
-		
+		File rootDirectory = new File(directory);
+		FileHandler fileHandler = new FileHandler();
+		ArrayList<File> allPrintFiles = fileHandler.subdirectoryLoop(rootDirectory);
+		// print out all files that will be printed just to check
+		System.out.println("All Found Files:");
+		for (int i = 0; i < allPrintFiles.size(); i++) {
+			System.out.println(allPrintFiles.get(i));
+		}
 	}
 	
 	/**
@@ -45,7 +52,5 @@ public class Controller {
 	    frame.setVisible(true);
 	    return(directory);
 	}
-	
-	public 
-	
+		
 }

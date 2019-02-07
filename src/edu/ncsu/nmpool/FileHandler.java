@@ -14,24 +14,47 @@ import java.util.ArrayList;
  */
 public class FileHandler {
 	
-	ArrayList<File> files;
-	ArrayList<File> subdirectories;
+	private ArrayList<File> files;
+	private ArrayList<File> subdirectories;
 	
 	/**
-	 * The FileHandler is defined by a root directory. From this information, we can identify the files that 
-	 *  the user wants to print.
+	 * The FileHandler collects all files and subdirectories that stem from the user-chosen root directory.
 	 *  
-	 * @param directory: the root directory that is chosen by the user. The user wants to print all files that
-	 * 	are present in this directory and its subdirectories.
 	 */
-	public FileHandler(String directory) {
-		File rootDirectory = new File(directory);
+	public FileHandler() {
 		files = new ArrayList<File>();
 		subdirectories = new ArrayList<File>();
 	}
 	
 	/**
+	 * Loop through the root directory and all its subdirectories to append all files that exist in the rooted system to the files 
+	 * ArrayList. As we find more subdirectories, continue to append them to the subdirectories ArrayList. Loop until no more 
+	 * subdirectories are found and we reach the end of the subdirectories ArrayList.
+	 * 
+	 * @param root: the directory corresponding to the one chosen by the user
+	 */
+	public ArrayList<File> subdirectoryLoop(File root) {
+		// start at the root-most directory (chosen by the user)
+		subdirectories.add(root);
+		int dirIndex = 0;
+		while(true) {
+			// check to see if there are any subdirectories left in the ArrayList. If there aren't, we're done gathering all files to print.
+			File theDir;
+			try {
+				theDir = subdirectories.get(dirIndex);
+			} catch(IndexOutOfBoundsException error) {
+				break;
+			}
+			getFiles(theDir);
+			getDirectories(theDir);
+			dirIndex++;
+		}
+		return(files);
+	}
+	
+	/**
 	 * Given some root directory, identify the files ONLY and save them to a temporary ArrayList
+	 * 
 	 * @param directory: a root directory
 	 */
 	public void getFiles(File directory) {
@@ -45,6 +68,7 @@ public class FileHandler {
 	
 	/**
 	 * Given a root directory, identify the (sub)directories ONLY and save them to a temporary ArrayList
+	 * 
 	 * @param directory
 	 */
 	public void getDirectories(File directory) {
