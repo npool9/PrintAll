@@ -31,7 +31,14 @@ public class Controller {
 			System.out.println(allPrintFiles.get(i));
 		}
 		DirectoryView view = new DirectoryView();
-		view.displayAllFiles(allPrintFiles);
+		boolean toPrint = view.displayAllFiles(allPrintFiles);
+		if (!toPrint) {
+			view.removeChoices(allPrintFiles);
+		}
+		System.out.println("Updated Print List:");
+		for (int i = 0; i < allPrintFiles.size(); i++) {
+			System.out.println(allPrintFiles.get(i).toString());
+		}
 	}
 	
 	/**
