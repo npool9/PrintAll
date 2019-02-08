@@ -15,27 +15,35 @@ import javax.swing.JFrame;
  *
  */
 public class Controller {
-	
+		
 	/**
 	 * Initialize the controller. Perform all steps for printing all documents in a chosen
 	 * directory.
 	 */
-	public void go() {
+	public void phase1() {
+		ArrayList<File> allPrintFiles;
 		String directory = initView();
 		File rootDirectory = new File(directory);
 		FileHandler fileHandler = new FileHandler();
-		ArrayList<File> allPrintFiles = fileHandler.subdirectoryLoop(rootDirectory);
-		// print out all files that will be printed just to check
-		System.out.println("All Found Files:");
-		for (int i = 0; i < allPrintFiles.size(); i++) {
-			System.out.println(allPrintFiles.get(i));
-		}
+		allPrintFiles = fileHandler.subdirectoryLoop(rootDirectory);
+		
 		DirectoryView view = new DirectoryView();
 		boolean toPrint = view.displayAllFiles(allPrintFiles);
+		// user wants to update list of files to print
 		if (!toPrint) {
 			view.removeChoices(allPrintFiles);
+		// user doesn't need to update list of files. go with what is already received.
+		} else {
+			phase2(allPrintFiles);
 		}
-		System.out.println("Updated Print List:");
+	}
+	
+	/**
+	 * Now that, we have a final list of files that we want to print (their absolute paths), let's initalize the print job.
+	 * @param allPrintFiles ArrayList<File>: the final list of files we want to print (mapped by absolute path)
+	 */
+	public void phase2(ArrayList<File> allPrintFiles) {
+		System.out.println("Files to print: ");
 		for (int i = 0; i < allPrintFiles.size(); i++) {
 			System.out.println(allPrintFiles.get(i).toString());
 		}

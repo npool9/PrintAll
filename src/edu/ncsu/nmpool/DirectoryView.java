@@ -6,9 +6,7 @@ package edu.ncsu.nmpool;
 import javax.swing.*;
 import java.awt.event.*;
 import java.io.File;
-import java.awt.*;
 import java.util.*;
-import java.util.List;
 
 /**
  * @author nathanpool
@@ -23,8 +21,6 @@ public class DirectoryView extends JPanel {
 	
 	private JFileChooser chooser;
 	private String chooserTitle;
-	protected ArrayList<File> newAllFiles;
-	protected List synchedList = Collections.synchronizedList(new LinkedList());;
 	
 	/**
 	 * Create the directory chooser view.
@@ -61,14 +57,14 @@ public class DirectoryView extends JPanel {
 	public boolean displayAllFiles(ArrayList<File> allFiles) {
 		boolean toPrint = false;
 		
-		JFrame frame = new JFrame("Double Check");
 		String fileList = "";
 		for (int i = 0; i < allFiles.size(); i++) {
 			String fileName = allFiles.get(i).toString();
 			fileList += fileName + "\n";
 		}
-		int optionChoice = JOptionPane.showConfirmDialog(frame, "<html>Are these the files you want to print?</br></br>"
-				+ "</html>" + fileList, "Double Check", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+		int optionChoice = JOptionPane.showConfirmDialog(new JFrame("Double Check"), "<html>Are these the files you want "
+				+ "to print?</br></br></html>" + fileList, "Double Check", JOptionPane.YES_NO_OPTION, 
+				JOptionPane.QUESTION_MESSAGE);
 		
 		if (optionChoice == 0) {
 			toPrint = true;
@@ -83,7 +79,6 @@ public class DirectoryView extends JPanel {
 	 * Give the user an option to remove some files
 	 * 
 	 * @param allFiles: an ArrayList of files with each File representing the absolute path of a file to be printed
-	 * @return ArrayList<File>: the updated (subsetted) ArrayList<File>
 	 */
 	public void removeChoices(ArrayList<File> allFiles) {
 		JFrame frame = new JFrame("File Deletion");
@@ -108,19 +103,18 @@ public class DirectoryView extends JPanel {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
 		        // Get the JCheckBoxes that were checked. Remove those from the list of files to print.
-		    	newAllFiles = getUnchecked(JCheckBoxes, allFiles);
-		    	System.out.println("We got 'em, dog.");
-		    	System.out.println(newAllFiles);
+		    	ArrayList<File> newAllFiles = getUnchecked(JCheckBoxes, allFiles);
+		    	System.out.println("Button Clicked!");
+		    	// Initiate phase 2 of the controller with the updated set of files to print
+		    	Controller control = new Controller();
+		    	control.phase2(newAllFiles);
 		    	System.exit(0);
 		    }
 		});
-		
 		panel.add(done);
 		frame.add(panel);
 	    frame.setSize(600, 400);
 	    frame.setVisible(true);
-	    
-		synchedList.add("Got the info");
 	}
 	
 	/**
@@ -132,13 +126,14 @@ public class DirectoryView extends JPanel {
 	 * @return ArrayList<File>: the list of files after removing unwanted ones by the user
 	 */
 	public ArrayList<File> getUnchecked(JCheckBox[] checks, ArrayList<File> allFiles) {
+		ArrayList<File> toRemove = new ArrayList<File>();
 		for (int i = 0; i < checks.length; i++) {
 			boolean checked = checks[i].isSelected();
 			if (checked) {
-				System.out.println("Removed: " + allFiles.get(i).toString());
-				allFiles.remove(i);
+				toRemove.add(allFiles.get(i));
 			}
 		}
+		allFiles.removeAll(toRemove);
 		return(allFiles);
 	}
 

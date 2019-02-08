@@ -1,9 +1,5 @@
 package edu.ncsu.nmpool;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import javax.swing.JFrame;
-
 /**
  * @author Nathan Pool
  *
@@ -15,7 +11,7 @@ public class Main {
 	 */
 	public static void main(String s[]) {
 		Controller controller = new Controller();
-		controller.go();
+		controller.phase1();
 //		System.exit(0);
 	  }
 
