@@ -6,8 +6,12 @@ package edu.ncsu.nmpool;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.print.Doc;
+import javax.print.DocPrintJob;
 import javax.swing.JFrame;
 
 /**
@@ -40,6 +44,7 @@ public class Controller {
 	
 	/**
 	 * Now that, we have a final list of files that we want to print (their absolute paths), let's initalize the print job.
+	 * 
 	 * @param allPrintFiles ArrayList<File>: the final list of files we want to print (mapped by absolute path)
 	 */
 	public void phase2(ArrayList<File> allPrintFiles) {
@@ -47,6 +52,20 @@ public class Controller {
 		for (int i = 0; i < allPrintFiles.size(); i++) {
 			System.out.println(allPrintFiles.get(i).toString());
 		}
+		
+		PrintingJob printJob = new PrintingJob(allPrintFiles);
+		DocPrintJob pj = printJob.createPrintJob();
+		FileInputStream[] files = null;
+		try {
+			files = printJob.loadDocuments(allPrintFiles);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Doc[] printableDocs = printJob.getDocuments(files);
+		System.out.println("Printing your documents...");
+		printJob.submitPrintJobs(printableDocs, pj);
+		System.out.println("Printing Complete.");
+		System.exit(0);
 	}
 	
 	/**
