@@ -13,15 +13,18 @@ import java.util.ArrayList;
 import javax.print.Doc;
 import javax.print.DocPrintJob;
 import javax.print.PrintService;
+import javax.print.event.PrintJobAdapter;
+import javax.print.event.PrintJobEvent;
 import javax.swing.JFrame;
 
 /**
  * @author nathanpool
  *
  */
-public class Controller {
+public class Controller extends PrintJobAdapter {
 	
 	protected ArrayList<File> allPrintFiles;
+	private boolean printNextDoc = false;
 		
 	/**
 	 * Initialize the controller. Perform all steps for printing all documents in a chosen
@@ -75,10 +78,18 @@ public class Controller {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		pj.addPrintJobListener(this);
+		
+		
 		Doc[] printableDocs = printJob.getDocuments(files);
 		System.out.println("Printing your documents...");
-		printJob.submitPrintJobs(printableDocs, pj);
-		System.out.println("Printing Complete.");
+		for (int i = 0; i < printableDocs.length; i++) {
+			Doc printDoc = printableDocs[i];
+			printJob.submitPrintJobs(printDoc, pj);
+			System.out.println("Job " + i + " Complete.");
+		}
+		System.out.println("All Printing Complete.");
 		System.exit(0);
 	}
 	
@@ -101,6 +112,15 @@ public class Controller {
 	    frame.setSize(panel.getPreferredSize());
 	    frame.setVisible(true);
 	    return(directory);
+	}
+	/**
+	 * 
+	 * @param event
+	 */
+	public void printJobNoMoreEvents(PrintJobEvent event) {
+		if (event.getPrintEventType() == PrintJobEvent.JOB_COMPLETE) {
+			this.printNextDoc = true;
+		}
 	}
 		
 }

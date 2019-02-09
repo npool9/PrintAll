@@ -17,13 +17,15 @@ import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.standard.Copies;
 import javax.print.attribute.standard.MediaSizeName;
 import javax.print.attribute.standard.Sides;
+import javax.print.event.PrintJobAdapter;
+import javax.print.event.PrintJobEvent;
 
 /**
  * @author nathanpool
  *
  * This class handles the actual printing of all the files provided to it.
  */
-public class PrintingJob {
+public class PrintingJob extends PrintJobAdapter {
 	
 	private ArrayList<File> allFiles;
 	
@@ -97,23 +99,21 @@ public class PrintingJob {
 	/**
 	 * Print all documents provided to the print job provided
 	 * 
-	 * @param printableDocuments: all the documents we will be printing (selected by the user)
+	 * @param printableDocument: the document (one at a time) we will be printing (selected by the user)
 	 * @param job: the print job to send documents to
 	 */
-	public void submitPrintJobs(Doc[] printableDocuments, DocPrintJob job) {
+	public void submitPrintJobs(Doc printableDocument, DocPrintJob job) {
 		// Define the attributes with which to print all of the documents
 		PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
 		aset.add(MediaSizeName.ISO_A4);
 		aset.add(new Copies(1));
 		aset.add(Sides.ONE_SIDED);
 
-		for (int i = 0; i < printableDocuments.length; i++) {
-			try {
-				job.print(printableDocuments[i], aset);
-			} catch (PrintException e) {
-				System.err.println("A print error occurred.");
-				System.err.println(e);
-			}
+		try {
+			job.print(printableDocument, aset);
+		} catch (PrintException e) {
+			System.err.println("A print error occurred.");
+			System.err.println(e);
 		}
 	}
 
