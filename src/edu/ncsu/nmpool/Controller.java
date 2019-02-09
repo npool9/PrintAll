@@ -83,16 +83,10 @@ public class Controller extends PrintJobAdapter {
 		
 		Doc[] printableDocs = printJob.getDocuments(files);
 		System.out.println("Printing your documents...");
-		int i = 0;
-		while (i < printableDocs.length) {
-			// wait for each document to finish printing before starting the next one
-			if (!this.isPrinting) { 
-				this.isPrinting = true;
-				Doc printDoc = printableDocs[i];
-				printJob.submitPrintJobs(printDoc, pj);
-				System.out.println("Job " + i + " Complete.");
-				i++;
-			}
+		for (int i = 0; i < printableDocs.length; i++) {
+			Doc printDoc = printableDocs[i];
+			printJob.submitPrintJobs(printDoc, pj);
+			System.out.println("Job " + i + " Complete.");
 		}
 		System.out.println("All Printing Complete.");
 		System.exit(0);
