@@ -3,6 +3,7 @@
  */
 package edu.ncsu.nmpool;
 
+import javax.print.PrintService;
 import javax.swing.*;
 import java.awt.event.*;
 import java.io.File;
@@ -19,6 +20,7 @@ import java.util.*;
  */
 public class DirectoryView extends JPanel {
 	
+	private ArrayList<File> newAllFiles;
 	private JFileChooser chooser;
 	private String chooserTitle;
 	
@@ -114,7 +116,7 @@ public class DirectoryView extends JPanel {
 		    @Override
 		    public void actionPerformed(ActionEvent e) {
 		        // Get the JCheckBoxes that were checked. Remove those from the list of files to print.
-		    	ArrayList<File> newAllFiles = getUnchecked(JCheckBoxes, allFiles);
+		    	newAllFiles = getUnchecked(JCheckBoxes, allFiles);
 		    	System.out.println("Button Clicked!");
 		    	// Initiate phase 2 of the controller with the updated set of files to print
 		    	Controller control = new Controller();
@@ -146,6 +148,68 @@ public class DirectoryView extends JPanel {
 		}
 		allFiles.removeAll(toRemove);
 		return(allFiles);
+	}
+	
+	/**
+	 * Give the user an option as to what printer they'd like to use.
+	 * 
+	 * @param services: the list of local print services available
+	 */
+	public void choosePrinter(PrintService[] services) {
+		JLabel label = new JLabel("Which printer would you like to use?");
+		JPanel panel = new JPanel();
+		JFrame frame = new JFrame("Printer Choice");
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		panel.add(label);
+		JCheckBox JCheckBox;
+		JCheckBox[] JCheckBoxes = new JCheckBox[services.length];
+		DefaultListModel<JCheckBox> model = new DefaultListModel<JCheckBox>();
+		JCheckBoxList JCheckBoxList = new JCheckBoxList(model);
+		for (int i = 0; i < services.length; i++) {
+			JCheckBox = new JCheckBox(services[i] + "\n");
+			model.addElement(JCheckBox);
+			JCheckBoxes[i] = JCheckBox;
+		}
+		JScrollPane scrollableTextArea = new JScrollPane(JCheckBoxList);
+		panel.add(scrollableTextArea);
+		
+		JButton done = new JButton("Done");
+		done.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        // Choose only the first one as the printer to use.
+		    	PrintService printer = getPrinter(JCheckBoxes, services);
+		    	// Initiate phase 2 of the controller with the updated set of files to print
+		    	Controller control = new Controller();
+		    	control.phase3(printer, newAllFiles);
+		    	System.exit(0);
+		    }
+		});
+		panel.add(done);
+		frame.add(panel);
+	    frame.setSize(600, 400);
+	    frame.setVisible(true);
+		
+	}
+	
+	/**
+	 * Get the first checked printer by the user
+	 * 
+	 * @param checks: the checkboxes that were options for the user's printers
+	 * @param services: the corresponding print services available to the user 
+	 * 
+	 * @return PrintService: the chosen print job to send documents to
+	 */
+	public PrintService getPrinter(JCheckBox[] checks, PrintService[] services) {
+		PrintService theChosenPrinter = null;
+		for (int i = 0; i < checks.length; i++) {
+			boolean checked = checks[i].isSelected();
+			if (checked) {
+				theChosenPrinter = services[i];
+				break;
+			}
+		}
+		return(theChosenPrinter);
 	}
 
 }

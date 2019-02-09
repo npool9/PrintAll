@@ -40,14 +40,29 @@ public class PrintingJob {
 	/**
 	 * Find local printers
 	 */
-	public DocPrintJob createPrintJob() {
+	public void createPrintJob() {
 		DocFlavor flavor = DocFlavor.INPUT_STREAM.PDF;
 		PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
 		aset.add(MediaSizeName.ISO_A4);
 		aset.add(new Copies(1));
 		PrintService[] services = PrintServiceLookup.lookupPrintServices(flavor, aset);
-		DocPrintJob pj = services[0].createPrintJob();
 		
+		// allow the user to choose the printer to which they'd like to send their documents
+		DirectoryView view = new DirectoryView();
+		view.choosePrinter(services);
+		System.exit(0);
+	}
+	
+	/**
+	 * Now that the user has chosen a printer they want to use, finish initialization of the DocPrintJob
+	 * 
+	 * @param printer: the printer chosen by the user
+	 * 
+	 * @return DocPrintJob: the print job
+	 */
+	public DocPrintJob finishEstablishingPrintJob(PrintService printer) {
+		DocPrintJob pj = printer.createPrintJob();
+		System.out.println("Service Name: " + printer.getName());
 		return(pj);
 	}
 	
@@ -92,7 +107,7 @@ public class PrintingJob {
 		aset.add(MediaSizeName.ISO_A4);
 		aset.add(new Copies(1));
 		aset.add(Sides.ONE_SIDED);
-		
+
 		for (int i = 0; i < printableDocuments.length; i++) {
 			try {
 				job.print(printableDocuments[i], aset);

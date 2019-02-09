@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 import javax.print.Doc;
 import javax.print.DocPrintJob;
+import javax.print.PrintService;
 import javax.swing.JFrame;
 
 /**
@@ -54,7 +55,18 @@ public class Controller {
 		}
 		
 		PrintingJob printJob = new PrintingJob(allPrintFiles);
-		DocPrintJob pj = printJob.createPrintJob();
+		printJob.createPrintJob();
+	}
+	
+	/**
+	 * The third and final phase now that the user has chosen the printer they'd like to use.
+	 * 
+	 * @param printer: the printer chosen by the user
+	 * @param allPrintFiles: the final list of files we want to print (mapped by absolute path)
+	 */
+	public void phase3(PrintService printer, ArrayList<File> allPrintFiles) {
+		PrintingJob printJob = new PrintingJob(allPrintFiles);
+		DocPrintJob pj = printJob.finishEstablishingPrintJob(printer);
 		FileInputStream[] files = null;
 		try {
 			files = printJob.loadDocuments(allPrintFiles);
