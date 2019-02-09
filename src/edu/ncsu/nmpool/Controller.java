@@ -24,7 +24,7 @@ import javax.swing.JFrame;
 public class Controller extends PrintJobAdapter {
 	
 	protected ArrayList<File> allPrintFiles;
-	private boolean printNextDoc = false;
+	private boolean isPrinting = false;
 		
 	/**
 	 * Initialize the controller. Perform all steps for printing all documents in a chosen
@@ -84,10 +84,16 @@ public class Controller extends PrintJobAdapter {
 		
 		Doc[] printableDocs = printJob.getDocuments(files);
 		System.out.println("Printing your documents...");
-		for (int i = 0; i < printableDocs.length; i++) {
-			Doc printDoc = printableDocs[i];
-			printJob.submitPrintJobs(printDoc, pj);
-			System.out.println("Job " + i + " Complete.");
+		int i = 0;
+		while (i < printableDocs.length) {
+			// wait for each document to finish printing before starting the next one
+			if (!this.isPrinting) { 
+				this.isPrinting = true;
+				Doc printDoc = printableDocs[i];
+				printJob.submitPrintJobs(printDoc, pj);
+				System.out.println("Job " + i + " Complete.");
+				i++;
+			}
 		}
 		System.out.println("All Printing Complete.");
 		System.exit(0);
@@ -114,13 +120,25 @@ public class Controller extends PrintJobAdapter {
 	    return(directory);
 	}
 	/**
+	 * Check the status of the print job
 	 * 
-	 * @param event
+	 * @param e: the printing event
 	 */
-	public void printJobNoMoreEvents(PrintJobEvent event) {
-		if (event.getPrintEventType() == PrintJobEvent.JOB_COMPLETE) {
-			this.printNextDoc = true;
-		}
+	public void printJobNoMoreEvents(PrintJobEvent e) {
+		if (e.getPrintEventType() == PrintJobEvent.DATA_TRANSFER_COMPLETE) {
+	        printDataTransferCompleted(e);
+		} else if (e.getPrintEventType() == PrintJobEvent.JOB_CANCELED) {
+	        printJobCanceled(e);
+		} else if (e.getPrintEventType() == PrintJobEvent.JOB_COMPLETE) {
+			this.isPrinting = false;
+	        printJobCompleted(e);
+		} else if (e.getPrintEventType() == PrintJobEvent.JOB_FAILED) {
+	        printJobFailed(e);
+		} else if (e.getPrintEventType() == PrintJobEvent.NO_MORE_EVENTS) {
+	        printJobNoMoreEvents(e);
+		} else {
+	        printJobRequiresAttention(e);
+	    }
 	}
 		
 }

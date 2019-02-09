@@ -43,7 +43,7 @@ public class PrintingJob extends PrintJobAdapter {
 	 * Find local printers
 	 */
 	public void createPrintJob() {
-		DocFlavor flavor = DocFlavor.INPUT_STREAM.PDF;
+		DocFlavor flavor = DocFlavor.INPUT_STREAM.AUTOSENSE;
 		PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
 		aset.add(MediaSizeName.ISO_A4);
 		aset.add(new Copies(1));
