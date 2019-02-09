@@ -78,9 +78,7 @@ public class Controller extends PrintJobAdapter {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		pj.addPrintJobListener(this);
-		
+				
 		Doc[] printableDocs = printJob.getDocuments(files);
 		System.out.println("Printing your documents...");
 		for (int i = 0; i < printableDocs.length; i++) {
@@ -111,27 +109,6 @@ public class Controller extends PrintJobAdapter {
 	    frame.setSize(panel.getPreferredSize());
 	    frame.setVisible(true);
 	    return(directory);
-	}
-	/**
-	 * Check the status of the print job
-	 * 
-	 * @param e: the printing event
-	 */
-	public void printJobNoMoreEvents(PrintJobEvent e) {
-		if (e.getPrintEventType() == PrintJobEvent.DATA_TRANSFER_COMPLETE) {
-	        System.out.println("Data Transfer Complete");
-		} else if (e.getPrintEventType() == PrintJobEvent.JOB_CANCELED) {
-	        System.out.println("Job Canceled");
-		} else if (e.getPrintEventType() == PrintJobEvent.JOB_COMPLETE) {
-			this.isPrinting = false;
-	        System.out.println("Job Complete!");
-		} else if (e.getPrintEventType() == PrintJobEvent.JOB_FAILED) {
-	        System.out.println("Job Failed :(");
-		} else if (e.getPrintEventType() == PrintJobEvent.NO_MORE_EVENTS) {
-			System.out.println("No More Events");
-		} else {
-	        System.out.println("Code Requires Attention");
-	    }
 	}
 		
 }
