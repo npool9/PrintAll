@@ -49,8 +49,8 @@ public class PrintingJob {
 		
 		// allow the user to choose the printer to which they'd like to send their documents
 		DirectoryView view = new DirectoryView();
+		view.newAllFiles = allFiles;
 		view.choosePrinter(services);
-		System.exit(0);
 	}
 	
 	/**
@@ -77,7 +77,6 @@ public class PrintingJob {
 		for (int i = 0; i < allPrintFiles.size(); i++) {
 			FileInputStream fis = new FileInputStream(allPrintFiles.get(i).toString());
 			fileStream[i] = fis;
-			fis.close();
 		}
 		return(fileStream);
 	}

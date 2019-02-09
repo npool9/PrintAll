@@ -20,13 +20,14 @@ import javax.swing.JFrame;
  *
  */
 public class Controller {
+	
+	protected ArrayList<File> allPrintFiles;
 		
 	/**
 	 * Initialize the controller. Perform all steps for printing all documents in a chosen
 	 * directory.
 	 */
 	public void phase1() {
-		ArrayList<File> allPrintFiles;
 		String directory = initView();
 		File rootDirectory = new File(directory);
 		FileHandler fileHandler = new FileHandler();
@@ -64,11 +65,12 @@ public class Controller {
 	 * @param printer: the printer chosen by the user
 	 * @param allPrintFiles: the final list of files we want to print (mapped by absolute path)
 	 */
-	public void phase3(PrintService printer, ArrayList<File> allPrintFiles) {
+	public void phase3(PrintService printer) {
 		PrintingJob printJob = new PrintingJob(allPrintFiles);
 		DocPrintJob pj = printJob.finishEstablishingPrintJob(printer);
 		FileInputStream[] files = null;
 		try {
+			System.out.println("All Files: " + allPrintFiles);
 			files = printJob.loadDocuments(allPrintFiles);
 		} catch (IOException e) {
 			e.printStackTrace();

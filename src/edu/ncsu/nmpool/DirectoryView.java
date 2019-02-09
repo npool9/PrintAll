@@ -20,7 +20,7 @@ import java.util.*;
  */
 public class DirectoryView extends JPanel {
 	
-	private ArrayList<File> newAllFiles;
+	protected ArrayList<File> newAllFiles;
 	private JFileChooser chooser;
 	private String chooserTitle;
 	
@@ -120,12 +120,19 @@ public class DirectoryView extends JPanel {
 		    	System.out.println("Button Clicked!");
 		    	// Initiate phase 2 of the controller with the updated set of files to print
 		    	Controller control = new Controller();
+		    	control.allPrintFiles = newAllFiles;
 		    	control.phase2(newAllFiles);
 		    	System.exit(0);
 		    }
 		});
 		panel.add(done);
 		frame.add(panel);
+		frame.addWindowListener(
+			      new WindowAdapter() {
+				        public void windowClosing(WindowEvent e) {
+				          System.exit(0);
+				        }
+				    });
 	    frame.setSize(600, 400);
 	    frame.setVisible(true);
 	}
@@ -181,11 +188,18 @@ public class DirectoryView extends JPanel {
 		    	PrintService printer = getPrinter(JCheckBoxes, services);
 		    	// Initiate phase 2 of the controller with the updated set of files to print
 		    	Controller control = new Controller();
-		    	control.phase3(printer, newAllFiles);
+		    	control.allPrintFiles = newAllFiles;
+		    	control.phase3(printer);
 		    	System.exit(0);
 		    }
 		});
 		panel.add(done);
+		frame.addWindowListener(
+			      new WindowAdapter() {
+				        public void windowClosing(WindowEvent e) {
+				          System.exit(0);
+				        }
+				    });
 		frame.add(panel);
 	    frame.setSize(600, 400);
 	    frame.setVisible(true);
