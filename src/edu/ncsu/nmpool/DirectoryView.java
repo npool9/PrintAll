@@ -189,7 +189,11 @@ public class DirectoryView extends JPanel {
 		    	// Initiate phase 2 of the controller with the updated set of files to print
 		    	Controller control = new Controller();
 		    	control.allPrintFiles = newAllFiles;
-		    	control.phase3(printer);
+		    	try {
+					control.phase3(printer);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
 		    	System.exit(0);
 		    }
 		});

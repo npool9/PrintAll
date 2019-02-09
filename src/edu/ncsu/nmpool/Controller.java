@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import javax.print.Doc;
 import javax.print.DocPrintJob;
@@ -67,8 +68,9 @@ public class Controller extends PrintJobAdapter {
 	 * 
 	 * @param printer: the printer chosen by the user
 	 * @param allPrintFiles: the final list of files we want to print (mapped by absolute path)
+	 * @throws InterruptedException 
 	 */
-	public void phase3(PrintService printer) {
+	public void phase3(PrintService printer) throws InterruptedException {
 		PrintingJob printJob = new PrintingJob(allPrintFiles);
 		DocPrintJob pj = printJob.finishEstablishingPrintJob(printer);
 		FileInputStream[] files = null;
@@ -84,6 +86,7 @@ public class Controller extends PrintJobAdapter {
 		for (int i = 0; i < printableDocs.length; i++) {
 			Doc printDoc = printableDocs[i];
 			printJob.submitPrintJobs(printDoc, pj);
+			TimeUnit.SECONDS.sleep(20);
 			System.out.println("Job " + i + " Complete.");
 		}
 		System.out.println("All Printing Complete.");
