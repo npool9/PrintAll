@@ -58,13 +58,24 @@ public class DirectoryView extends JPanel {
 		boolean toPrint = false;
 		
 		String fileList = "";
+		String[] tempFileList = new String[allFiles.size()];
 		for (int i = 0; i < allFiles.size(); i++) {
 			String fileName = allFiles.get(i).toString();
 			fileList += fileName + "\n";
+			tempFileList[i] = fileName;
+			System.out.println("File List: " + fileList);
 		}
-		int optionChoice = JOptionPane.showConfirmDialog(new JFrame("Double Check"), "<html>Are these the files you want "
-				+ "to print?</br></br></html>" + fileList, "Double Check", JOptionPane.YES_NO_OPTION, 
-				JOptionPane.QUESTION_MESSAGE);
+		JList theFileList = new JList(tempFileList);
+		JScrollPane scrollableTextArea = new JScrollPane(theFileList);
+		JLabel label = new JLabel("Are these the files you want to print?");
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		JFrame frame = new JFrame("Double Check");
+		panel.add(label);
+		panel.add(scrollableTextArea);
+		frame.add(panel);
+		int optionChoice = JOptionPane.showConfirmDialog(frame, panel, "Double Check!", 
+				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 		
 		if (optionChoice == 0) {
 			toPrint = true;
