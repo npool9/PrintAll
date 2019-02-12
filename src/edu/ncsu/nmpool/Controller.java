@@ -9,13 +9,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 import javax.print.Doc;
 import javax.print.DocPrintJob;
 import javax.print.PrintService;
 import javax.print.event.PrintJobAdapter;
-import javax.print.event.PrintJobEvent;
 import javax.swing.JFrame;
 
 /**
