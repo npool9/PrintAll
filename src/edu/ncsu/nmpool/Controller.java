@@ -89,11 +89,10 @@ public class Controller extends PrintJobAdapter {
 		for (int i = 0; i < printableDocs.length; i++) {
 			JobCompleteMonitor monitor = new JobCompleteMonitor();
 			pjs[i].addPrintJobListener(monitor);
-			printJob.submitPrintJob(printableDocs[i], pjs[i]);\
+			printJob.submitPrintJob(printableDocs[i], pjs[i]);
 			monitor.waitForJobCompletion();
-			System.out.println("Job " + i + " Complete.");
+			System.out.println("Job " + i + " Printing.");
 		}
-		System.out.println("All Printing Complete.");
 		System.exit(0);
 	}
 	
