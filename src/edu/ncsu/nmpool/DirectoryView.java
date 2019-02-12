@@ -38,7 +38,7 @@ public class DirectoryView extends JPanel {
 	    // disable the "All files" option.
 	    chooser.setAcceptAllFileFilterUsed(false);
 	    String selectedDirectory = "No Selection";
-	    if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) { 
+	    if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
 	      System.out.println("Current Directory: " 
 	         +  chooser.getCurrentDirectory());
 	      selectedDirectory = chooser.getSelectedFile() + "";
@@ -117,12 +117,13 @@ public class DirectoryView extends JPanel {
 		    public void actionPerformed(ActionEvent e) {
 		        // Get the JCheckBoxes that were checked. Remove those from the list of files to print.
 		    	newAllFiles = getUnchecked(JCheckBoxes, allFiles);
-		    	System.out.println("Button Clicked!");
+		    	System.out.println("New All Files: " + newAllFiles);
 		    	// Initiate phase 2 of the controller with the updated set of files to print
 		    	Controller control = new Controller();
 		    	control.allPrintFiles = newAllFiles;
 		    	control.phase2(newAllFiles);
-		    	System.exit(0);
+		    	// close window
+		    	frame.dispose();
 		    }
 		});
 		panel.add(done);
@@ -194,7 +195,8 @@ public class DirectoryView extends JPanel {
 				} catch (InterruptedException e1) {
 					e1.printStackTrace();
 				}
-		    	System.exit(0);
+		    	// close window
+		    	frame.dispose();
 		    }
 		});
 		panel.add(done);

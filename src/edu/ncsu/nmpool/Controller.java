@@ -62,7 +62,7 @@ public class Controller extends PrintJobAdapter {
 	}
 	
 	/**
-	 * The third and final phase now that the user has chosen the printer they'd like to use.
+	 * Runs the third and final phase now that the user has chosen the printer they'd like to use.
 	 * 
 	 * @param printer: the printer chosen by the user
 	 * @param allPrintFiles: the final list of files we want to print (mapped by absolute path)
