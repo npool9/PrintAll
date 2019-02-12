@@ -97,23 +97,20 @@ public class PrintingJob extends PrintJobAdapter {
 	}
 	
 	/**
-	 * Print all documents provided to the print job provided
+	 * Print the documents provided to the print job provided
 	 * 
 	 * @param printableDocument: the document (one at a time) we will be printing (selected by the user)
 	 * @param job: the print job to send documents to
 	 */
-	public void submitPrintJobs(Doc printableDocument, DocPrintJob job) {
+	public void submitPrintJob(Doc printableDocument, DocPrintJob job) {
 		// Define the attributes with which to print all of the documents
-		
 		PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
 		aset.add(MediaSizeName.ISO_A4);
 		aset.add(new Copies(1));
 		aset.add(Sides.ONE_SIDED);
 
-		PrintJobMonitor printJobMonitor=new PrintJobMonitor(job);
 		try {
 			job.print(printableDocument, aset);
-			printJobMonitor.waitForPrintJob();
 		} catch (PrintException e) {
 			System.err.println("A print error occurred.");
 			System.err.println(e);

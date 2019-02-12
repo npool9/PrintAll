@@ -72,7 +72,10 @@ public class Controller extends PrintJobAdapter {
 	 */
 	public void phase3(PrintService printer) throws InterruptedException {
 		PrintingJob printJob = new PrintingJob(allPrintFiles);
-		DocPrintJob pj = printJob.finishEstablishingPrintJob(printer);
+		DocPrintJob[] pjs = new DocPrintJob[allPrintFiles.size()];
+		for (int i = 0; i < allPrintFiles.size(); i++) {
+			pjs[i] = printJob.finishEstablishingPrintJob(printer);
+		}
 		FileInputStream[] files = null;
 		try {
 			System.out.println("All Files: " + allPrintFiles);
@@ -84,9 +87,10 @@ public class Controller extends PrintJobAdapter {
 		Doc[] printableDocs = printJob.getDocuments(files);
 		System.out.println("Printing your documents...");
 		for (int i = 0; i < printableDocs.length; i++) {
-			Doc printDoc = printableDocs[i];
-			printJob.submitPrintJobs(printDoc, pj);
-			TimeUnit.SECONDS.sleep(20);
+			JobCompleteMonitor monitor = new JobCompleteMonitor();
+			pjs[i].addPrintJobListener(monitor);
+			printJob.submitPrintJob(printableDocs[i], pjs[i]);\
+			monitor.waitForJobCompletion();
 			System.out.println("Job " + i + " Complete.");
 		}
 		System.out.println("All Printing Complete.");
