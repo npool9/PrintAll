@@ -43,11 +43,11 @@ public class PrintingJob extends PrintJobAdapter {
 	 * Find local printers
 	 */
 	public void createPrintJob() {
-		DocFlavor flavor = DocFlavor.INPUT_STREAM.TEXT_PLAIN_HOST;
+//		DocFlavor flavor = DocFlavor.INPUT_STREAM.TEXT_PLAIN_HOST;
 		PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
 		aset.add(MediaSizeName.ISO_A4);
 		aset.add(new Copies(1));
-		PrintService[] services = PrintServiceLookup.lookupPrintServices(flavor, aset);
+		PrintService[] services = PrintServiceLookup.lookupPrintServices(null, null);
 		
 		// allow the user to choose the printer to which they'd like to send their documents
 		DirectoryView view = new DirectoryView();
